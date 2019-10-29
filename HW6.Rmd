@@ -93,7 +93,9 @@ _(optional: create plots of the posterior densities of some key variables - are 
 
   j.  If you were to design a new candy to optimize the winning percent, what features would it have?   Create a prediction interval under BMA  (not selection) for your designer candy and interpret.  
   
-  k. Summarize your modeling efforts in a couple of paragraphs suitable for readers of 538, providing interpretation of coefficients and the interactions on how the they impact the winning percent and details about your optimal candy.  (see the 538 blog linked above for inspiration!)  
+  k.  Use the lasso to fit a model to the `winpercent`.  Comment on which variables it identifies.  How does this compare to the other results?  (what is the optimal combination with the lasso?)  Can you construct a prediction interval for the `winpercent` for this candy?
+  
+  l. Summarize your modeling efforts in a couple of paragraphs suitable for readers of 538, providing interpretation of coefficients and the interactions on how the they impact the winning percent and details about your optimal candy.  (see the 538 blog linked above for inspiration!)  
   
 
 
