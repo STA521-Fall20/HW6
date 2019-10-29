@@ -1,0 +1,111 @@
+---
+title: 'HW6: TEAM  [my team number/name here]'
+author: '[my team members here]'
+date: ''
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+Part I. (work individually and then compare) In this exercise we will verify some of the expressions for BMA by hand/using R as a calculator. Load the Prostate data from the lasso2 package.
+
+```{r, include=FALSE}
+library(dplyr)
+data(Prostate, package="lasso2")
+Prostate = select(Prostate, lcavol, age, lpsa)
+```
+
+  a. Center the 2 predictors, `age` and `lpsa` and using the centered predictors, fit the four possible models with response `lacvol`.  Make a table with the R2, the number of predictors $p$ (this does not include the intercept,  values of the MLE's under each model,  from the OLS fits.  Verify that the intercept and its standard error is the same in all models.
+    
+    
+  b. For the four models, compute the log Bayes Factor to compare each model to the null model under the g-prior with $g=n$ where
+$$\log BF[M_j : M_0] = \frac{(n - p_j - 1)}{2} \log(1 + g) - \frac{n-1}{2}  \log(1 + g(1 - R^2_{j}))$$
+      
+  for the 4 models (j = 0, 1, 2, 3). Exponentiate to obtain the 4 Bayes Factors and complete the table below
+
+j | $p_j$ | $\gamma_{1j}$ | $\gamma_{2j}$ | $BF[M_j:M_0]$
+--|-------|---------------|---------------|--------------
+0 |    0  |             0 |           0   |  1
+1 |    1  |             1 |           0   |  
+2 |    1  |             0 |           1   |  
+3 |    2  |             1 |           1   |  
+    
+
+ c.  Calculate the posterior probabilities of the four models under the uniform prior distribution, 
+$$
+   P(M_j \mid Y) = \frac{BF[M_j : M_0] }
+   {\sum_{k=0}^3 BF[M_k : M_0] }
+$$     
+
+ d.  Calculate the probability that the coefficient for `lpsa` and `age` are not zero, 
+$$
+   \sum_j \gamma_{1j}  P(M_j \mid Y) 
+$$
+
+e.  Calculate the posterior mean for $\beta_{lpsa}$ under the g-prior and model averaging
+$$
+  E[\beta_{lpsa} \mid Y ] =  \frac{g}{1 + g} \sum_j \hat{\beta}_{lpsa, M_j} P(M_j \mid Y) 
+$$
+where $\hat{\beta}_{lpsa, M_j}$ is the OLS/MLE estimate from your table above. (Repeat for `age`.
+
+d.  Confirm your answers using `bas.lm`
+
+Part 2.  We will explore the data  behind [The Ultimate Halloween Candy Power Ranking](http://fivethirtyeight.com/features/the-ultimate-halloween-candy-power-ranking/).  
+
+Read the `candy-data.csv` into `R` using the command `read.csv` with the option `header=T`. 
+The data includes attributes for each candy along with its ranking. For binary variables, 1 means yes, 0 means no. The data contains the following fields: 
+
+Header | Description
+-------|------------
+chocolate | Does it contain chocolate?
+fruity | Is it fruit flavored?
+caramel | Is there caramel in the candy?
+peanutalmondy | Does it contain peanuts, peanut butter or almonds?
+nougat | Does it contain nougat?
+crispedricewafer | Does it contain crisped rice, wafers, or a cookie component?
+hard | Is it a hard candy?
+bar | Is it a candy bar?
+pluribus | Is it one of many candies in a bag or box?
+sugarpercent | The percentile of sugar it falls under within the data set.
+pricepercent | The unit price percentile compared to the rest of the set.
+winpercent | The overall win percentage according to 269,000 matchups.
+
+
+  a. Explore the association between `winpercent` and the other other variables graphically and comment.
+ 
+ 
+  b. Fit the full model with all predictors (except `competitorname`) and plot residuals versus fitted values.  Comment on whether the model seems appropriate or you need to transform.   Create confidence intervals for all of the coefficients and present in a table sorted by the estimates from high to low.  (present as a nicely formated table).
+    
+  c. Are there any interactions between features that you think might be relevant?   Are there any interactions that you think are not really feasible, hard and nougat?  Fit the model with all possible interactions and comment on the summary.   
+
+  d.  Using the `step` function with `AIC`  which variables and interactions (you do not need to start with all interactions) are in the best AIC model?  Provide a summary of the final model.
+   
+  e.  Fit the model selected using `AIC` and create confidence intervals for each of the coefficients formated as above.  Do any of the intervals contain zero?   Do any intervals seem poorly estimated based on  modeling `winpercent that is between 0 and 100?
+
+  f. Use BMA to fit a model to explore which features predict `winpercent` (If your team number is less than or equal to 5 use the g-prior with `a=n`. If your team number is greater than 5 use the `prior='JZS'`.   Use `method="MCMC"` and check the diagnostic plots for convergence, rerunning longer if it looks like it has not converged. Provide a summary of the output.  _Handling models that are not full rank (as the full model with all 2 way interactions is experimental in BAS; I suggest starting with the AIC model `formula(candy.AIC)` (see the file candy-EDA.Rmd) or be judicious in terms of choosing interactions to go in based on your subjective information on Halloween candy so that run times are not tooooo long._
+    
+  g. Create a plot of the model space and the marginal inclusion probabilities  and  comment. How do these results compare to AIC? 
+    
+  h. Provide a table of estimates of the coefficients and credible intervals (sorted as above) and comment on how they compare to the estimates under the best AIC model. According to your model which features are associated with high overall win percentage?  What features are associated with low overall win percentage?  Which features do not seem to be important? (Be carful with interactions here!)
+_(optional: create plots of the posterior densities of some key variables - are there any bi-modal distributions, if so comment)_    
+  
+  i. Which variables are included in the Highest Probability Model, the Median Probability Model and the "Best Probability Model"  How do these campare to the best AIC model?
+
+  j.  If you were to design a new candy to optimize the winning percent, what features would it have?   Create a prediction interval under BMA  (not selection) for your designer candy and interpret.  
+  
+  k. Summarize your modeling efforts in a couple of paragraphs suitable for readers of 538, providing interpretation of coefficients and the interactions on how the they impact the winning percent and details about your optimal candy.  (see the 538 blog linked above for inspiration!)  
+  
+
+
+
+
+
+
+
+
+
+    
+    
+
+   
+
